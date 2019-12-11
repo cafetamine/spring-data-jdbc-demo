@@ -1,7 +1,5 @@
 package com.cafetamine.spring.data.jdbc.demo.repository.actor;
 
-import com.cafetamine.spring.data.jdbc.demo.domain.def.Gender;
-
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
