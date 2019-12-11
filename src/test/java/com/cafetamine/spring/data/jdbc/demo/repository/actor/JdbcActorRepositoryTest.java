@@ -1,6 +1,7 @@
 package com.cafetamine.spring.data.jdbc.demo.repository.actor;
 
 import com.cafetamine.spring.data.jdbc.demo.config.JdbcNamingStrategyConfig;
+import com.cafetamine.spring.data.jdbc.demo.domain.def.Gender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.relational.core.mapping.NamingStrategy;
 
 import java.time.LocalDate;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,8 +40,10 @@ class JdbcActorRepositoryTest {
                 null,
                 "Joaquin",
                 "Phoenix",
-                LocalDate.of(1974, 10, 28), null)
-        );
+                LocalDate.of(1974, 10, 28),
+                null,
+                Gender.Male
+        ));
     }
 
     @Test
@@ -49,7 +53,7 @@ class JdbcActorRepositoryTest {
 
     @Test
     void test_M_findById_NonExisting() {
-        assertThat(repository.findById(100L)).isEmpty();
+        assertThat(repository.findById(Long.MAX_VALUE)).isEmpty();
     }
 
     @Test
@@ -66,6 +70,16 @@ class JdbcActorRepositoryTest {
         assertThat(repository.findById(expected.getId())).hasValueSatisfying(actor ->
                 assertThat(actor.getDeathdate()).isEqualTo(expectedDate)
         );
+    }
+
+    @Test
+    void test_M_findAllByGender() {
+        assertThat(repository.findAllByGender(Gender.Male.name())).isEqualTo(Collections.singletonList(expected));
+    }
+
+    @Test
+    void test_M_findAllByGender_ForNonMatching() {
+        assertThat(repository.findAllByGender(Gender.Female.name())).isEqualTo(Collections.emptyList());
     }
 
 }

@@ -351,3 +351,73 @@ void test_M_updateDeathdate() {
     );
 }
 ```
+
+## Enum attributes
+
+### With CrudRepository
+
+Next I have decided to check how does enum support work for library. I have added fallowing field to `ActorEntity`.
+
+```java
+public enum Gender {
+    Male, Female, Other
+}
+
+
+@Data @AllArgsConstructor @FieldDefaults(level = AccessLevel.PRIVATE)
+@Table("ACTORS")
+class ActorEntity {
+
+    @Id Long id;
+    String name, surname;
+    LocalDate birthdate, deathdate;
+    Gender gender;
+
+}
+```
+
+After running all tests have passed meaning that both conversion of enum between application and database works fine in default `CrudRepository` methods.
+
+### In custom query
+
+Next up I tried to use enum in a custom query as below:
+
+```java
+@Repository
+interface JdbcActorRepository extends CrudRepository<ActorEntity, Long> {
+
+    @Query("SELECT * FROM ACTORS WHERE Gender = :gender")
+    List<ActorEntity> findAllByGender(Gender gender);
+
+}
+```
+
+And check result with test:
+
+```java
+@Test
+void test_M_findAllByGender() {
+   assertThat(repository.findAllByGender(Gender.Male)).isEqualTo(Collections.singletonList(expected));
+}
+```
+
+I was surprised to find out that this test did not pass. I have tried to find how to declare a mapper recognized by database engine with no luck. I will go back to it in the future.
+
+Replacing `enum` with its `String` value works fine.
+
+```java
+@Repository
+interface JdbcActorRepository extends CrudRepository<ActorEntity, Long> {
+
+    @Query("SELECT * FROM ACTORS WHERE Gender = :gender")
+    List<ActorEntity> findAllByGender(String gender);
+
+}
+```
+
+```java
+@Test
+void test_M_findAllByGender() {
+   assertThat(repository.findAllByGender(Gender.Male.name())).isEqualTo(Collections.singletonList(expected));
+}
+```

@@ -1,6 +1,7 @@
 package com.cafetamine.spring.data.jdbc.demo.repository.actor;
 
 import com.cafetamine.spring.data.jdbc.demo.domain.actor.Actor;
+import com.cafetamine.spring.data.jdbc.demo.domain.def.Gender;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,13 +19,14 @@ import java.time.LocalDate;
 @Table("ACTORS")
 class ActorEntity {
 
-    @Id Long id;
+    @Id @With Long id;
     String name, surname;
     LocalDate birthdate, deathdate;
+    Gender gender;
 
 
     Actor toDomain() {
-        return new Actor(id, name, surname, birthdate, deathdate);
+        return new Actor(id, name, surname, birthdate, deathdate, gender);
     }
 
     static ActorEntity fromDomain(final Actor actor) {
@@ -33,7 +35,8 @@ class ActorEntity {
                 actor.getName(),
                 actor.getSurname(),
                 actor.getBirthdate(),
-                actor.getDeathdate()
+                actor.getDeathdate(),
+                actor.getGender()
         );
     }
 

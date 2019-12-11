@@ -3,6 +3,7 @@ package com.cafetamine.spring.data.jdbc.demo.repository.actor;
 import com.cafetamine.spring.data.jdbc.demo.domain.actor.Actor;
 import com.cafetamine.spring.data.jdbc.demo.domain.actor.IActorRepository;
 
+import com.cafetamine.spring.data.jdbc.demo.domain.def.Gender;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,10 +34,10 @@ class ActorRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
-        phoenixEntity = new ActorEntity(1L, "Joaquin", "Phoenix", LocalDate.of(1974, 10, 28), null);
-        niroEntity = new ActorEntity(2L, "Robert", "De Niro", LocalDate.of(1943, 8, 17), null);
-        phoenix = new Actor(1L, "Joaquin", "Phoenix", LocalDate.of(1974, 10, 28), null);
-        niro = new Actor(2L, "Robert", "De Niro", LocalDate.of(1943, 8, 17), null);
+        phoenixEntity = new ActorEntity(1L, "Joaquin", "Phoenix", LocalDate.of(1974, 10, 28), null, Gender.Male);
+        niroEntity = new ActorEntity(2L, "Robert", "De Niro", LocalDate.of(1943, 8, 17), null, Gender.Male);
+        phoenix = new Actor(1L, "Joaquin", "Phoenix", LocalDate.of(1974, 10, 28), null, Gender.Male);
+        niro = new Actor(2L, "Robert", "De Niro", LocalDate.of(1943, 8, 17), null, Gender.Male);
     }
 
     @Test
@@ -81,6 +82,20 @@ class ActorRepositoryTest {
         when(jdbcActorRepository.findById(1L)).thenReturn(Optional.of(phoenixEntity));
 
         assertThat(actorRepository.updateDeathdate(1L, LocalDate.of(2019, 12, 10))).hasValue(phoenix);
+    }
+
+    @Test
+    void test_M_findAllByGender() {
+        when(jdbcActorRepository.findAllByGender(Gender.Male.name())).thenReturn(Arrays.asList(phoenixEntity, niroEntity));
+
+        assertThat(actorRepository.findAllByGender(Gender.Male)).isEqualTo(Arrays.asList(phoenix, niro));
+    }
+
+    @Test
+    void test_M_findAllByGender_ForNonMatching() {
+        when(jdbcActorRepository.findAllByGender(Gender.Male.name())).thenReturn(Collections.emptyList());
+
+        assertThat(actorRepository.findAllByGender(Gender.Male)).isEqualTo(Collections.emptyList());
     }
 
 }

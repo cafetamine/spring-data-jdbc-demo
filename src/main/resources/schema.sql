@@ -6,5 +6,6 @@ CREATE TABLE ACTORS (
     Name VARCHAR(120) NOT NULL,
     Surname VARCHAR(120) NOT NULL,
     Birthdate DATETIME2 NOT NULL,
-    Deathdate DATETIME2
+    Deathdate DATETIME2,
+    Gender VARCHAR(10) NOT NULL
 );

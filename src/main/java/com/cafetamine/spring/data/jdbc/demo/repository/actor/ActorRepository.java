@@ -2,6 +2,7 @@ package com.cafetamine.spring.data.jdbc.demo.repository.actor;
 
 import com.cafetamine.spring.data.jdbc.demo.domain.actor.Actor;
 import com.cafetamine.spring.data.jdbc.demo.domain.actor.IActorRepository;
+import com.cafetamine.spring.data.jdbc.demo.domain.def.Gender;
 
 import lombok.AllArgsConstructor;
 
@@ -43,6 +44,14 @@ public class ActorRepository implements IActorRepository {
             return findById(id);
         }
         return Optional.empty();
+    }
+
+    @Override
+    public List<Actor> findAllByGender(final Gender gender) {
+        return actorRepository.findAllByGender(gender.name())
+                              .stream()
+                              .map(ActorEntity::toDomain)
+                              .collect(Collectors.toList());
     }
 
 }
