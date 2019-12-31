@@ -43,7 +43,7 @@ class JdbcGenreRepositoryTest {
     }
 
     @Test
-    void test_M_save_newEntity() {
+    void save_newEntity() {
         final GenreEntity saved = repository.save(new GenreEntity(null, "thriller"));
 
         assertThat(repository.count()).isEqualTo(3L);
@@ -51,7 +51,7 @@ class JdbcGenreRepositoryTest {
     }
 
     @Test
-    void test_M_save_existingEntity() {
+    void save_existingEntity() {
         assertThat(catchThrowableOfType(() ->
                 repository.save(new GenreEntity(null, "comedy")),
                 DbActionExecutionException.class
@@ -60,12 +60,12 @@ class JdbcGenreRepositoryTest {
     }
 
     @Test
-    void test_M_findByName_NonExisting() {
+    void findByName_NonExisting() {
         assertThat(repository.findByName("does not exist")).isEmpty();
     }
 
     @Test
-    void test_M_findByName() {
+    void findByName() {
         assertThat(repository.findByName("comedy")).hasValue(comedy);
         assertThat(repository.findByName("tragedy")).hasValue(tragedy);
     }

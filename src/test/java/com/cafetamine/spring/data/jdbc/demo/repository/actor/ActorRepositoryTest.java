@@ -23,9 +23,9 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class ActorRepositoryTest {
 
-    private final static JdbcActorRepository jdbcActorRepository = mock(JdbcActorRepository.class);
+    private static final JdbcActorRepository jdbcActorRepository = mock(JdbcActorRepository.class);
 
-    private final static IActorRepository actorRepository = new ActorRepository(jdbcActorRepository);
+    private static final IActorRepository actorRepository = new ActorRepository(jdbcActorRepository);
 
 
     private ActorEntity phoenixEntity, niroEntity;
@@ -41,14 +41,21 @@ class ActorRepositoryTest {
     }
 
     @Test
-    void test_M_findAll_returnsEmptyList() {
+    void create() {
+        when(jdbcActorRepository.save(phoenixEntity.withId(null))).thenReturn(phoenixEntity);
+
+        assertThat(actorRepository.create(phoenix.withId(null))).isEqualTo(phoenix);
+    }
+
+    @Test
+    void findAll_returnsEmptyList() {
         when(jdbcActorRepository.findAll()).thenReturn(Collections.emptyList());
 
         assertThat(actorRepository.findAll()).isEqualTo(Collections.emptyList());
     }
 
     @Test
-    void test_M_findAll_returnsExpectedValues() {
+    void findAll_returnsExpectedValues() {
         when(jdbcActorRepository.findAll()).thenReturn(Arrays.asList(phoenixEntity, niroEntity));
 
         assertThat(actorRepository.findAll()).isEqualTo(Arrays.asList(phoenix, niro));
@@ -56,28 +63,28 @@ class ActorRepositoryTest {
 
 
     @Test
-    void test_M_findById_NonExisting() {
+    void findById_NonExisting() {
         when(jdbcActorRepository.findById(100L)).thenReturn(Optional.empty());
 
         assertThat(actorRepository.findById(100L)).isEmpty();
     }
 
     @Test
-    void test_M_findById() {
+    void findById() {
         when(jdbcActorRepository.findById(1L)).thenReturn(Optional.of(phoenixEntity));
 
         assertThat(actorRepository.findById(1L)).hasValue(phoenix);
     }
 
     @Test
-    void test_M_findByFullname() {
+    void findByFullname() {
         when(jdbcActorRepository.findByFullname("Joaquin Phoenix")).thenReturn(Optional.of(phoenixEntity));
 
         assertThat(actorRepository.findByFullname("Joaquin Phoenix")).hasValue(phoenix);
     }
 
     @Test
-    void test_M_updateDeathdate() {
+    void updateDeathdate() {
         when(jdbcActorRepository.updateDeathdate(1L, LocalDate.of(2019, 12, 10))).thenReturn(true);
         when(jdbcActorRepository.findById(1L)).thenReturn(Optional.of(phoenixEntity));
 
@@ -85,14 +92,14 @@ class ActorRepositoryTest {
     }
 
     @Test
-    void test_M_findAllByGender() {
+    void findAllByGender() {
         when(jdbcActorRepository.findAllByGender(Gender.Male.name())).thenReturn(Arrays.asList(phoenixEntity, niroEntity));
 
         assertThat(actorRepository.findAllByGender(Gender.Male)).isEqualTo(Arrays.asList(phoenix, niro));
     }
 
     @Test
-    void test_M_findAllByGender_ForNonMatching() {
+    void findAllByGender_ForNonMatching() {
         when(jdbcActorRepository.findAllByGender(Gender.Male.name())).thenReturn(Collections.emptyList());
 
         assertThat(actorRepository.findAllByGender(Gender.Male)).isEqualTo(Collections.emptyList());

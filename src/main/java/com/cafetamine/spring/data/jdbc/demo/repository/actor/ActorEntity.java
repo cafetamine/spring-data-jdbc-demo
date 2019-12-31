@@ -17,7 +17,7 @@ import java.time.LocalDate;
 
 @Data @AllArgsConstructor @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table("ACTORS")
-class ActorEntity {
+public class ActorEntity {
 
     @Id @With Long id;
     String name, surname;
@@ -25,7 +25,7 @@ class ActorEntity {
     Gender gender;
 
 
-    Actor toDomain() {
+    public Actor toDomain() {
         return new Actor(id, name, surname, birthdate, deathdate, gender);
     }
 

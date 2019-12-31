@@ -11,7 +11,7 @@ import java.util.Optional;
 
 
 @Repository
-interface JdbcActorRepository extends CrudRepository<ActorEntity, Long> {
+public interface JdbcActorRepository extends CrudRepository<ActorEntity, Long> {
 
     @Query("SELECT * FROM ACTORS WHERE CONCAT(Name, ' ', Surname) LIKE :fullname")
     Optional<ActorEntity> findByFullname(String fullname);

@@ -47,22 +47,22 @@ class JdbcActorRepositoryTest {
     }
 
     @Test
-    void test_M_findById() {
+    void findById() {
         assertThat(repository.findById(expected.getId())).hasValue(expected);
     }
 
     @Test
-    void test_M_findById_NonExisting() {
+    void findById_NonExisting() {
         assertThat(repository.findById(Long.MAX_VALUE)).isEmpty();
     }
 
     @Test
-    void test_M_findByFullname() {
+    void findByFullname() {
         assertThat(repository.findByFullname("Joaquin Phoenix")).hasValue(expected);
     }
 
     @Test
-    void test_M_updateDeathdate() {
+    void updateDeathdate() {
         final LocalDate expectedDate = LocalDate.of(2019, 12, 9);
         final boolean isSuccess = repository.updateDeathdate(expected.getId(), expectedDate); // sooorryy
 
@@ -73,12 +73,12 @@ class JdbcActorRepositoryTest {
     }
 
     @Test
-    void test_M_findAllByGender() {
+    void findAllByGender() {
         assertThat(repository.findAllByGender(Gender.Male.name())).isEqualTo(Collections.singletonList(expected));
     }
 
     @Test
-    void test_M_findAllByGender_ForNonMatching() {
+    void findAllByGender_ForNonMatching() {
         assertThat(repository.findAllByGender(Gender.Female.name())).isEqualTo(Collections.emptyList());
     }
 

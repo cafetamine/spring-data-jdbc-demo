@@ -13,19 +13,19 @@ import org.springframework.data.relational.core.mapping.Table;
 
 
 @Data @AllArgsConstructor @FieldDefaults(level = AccessLevel.PRIVATE)
-@Table("GENRE")
-class GenreEntity {
+@Table("GENRES")
+public class GenreEntity {
 
     @Id @With Integer id;
     String name;
 
 
     Genre toDomain() {
-        return new Genre(name);
+        return new Genre(id, name);
     }
 
     static GenreEntity fromDomain(final Genre genre) {
-        return new GenreEntity(null, genre.getName());
+        return new GenreEntity(genre.getId(), genre.getName());
     }
 
 }

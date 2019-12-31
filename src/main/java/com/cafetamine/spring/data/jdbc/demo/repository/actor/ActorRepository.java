@@ -3,6 +3,8 @@ package com.cafetamine.spring.data.jdbc.demo.repository.actor;
 import com.cafetamine.spring.data.jdbc.demo.domain.actor.Actor;
 import com.cafetamine.spring.data.jdbc.demo.domain.actor.IActorRepository;
 import com.cafetamine.spring.data.jdbc.demo.domain.def.Gender;
+import com.cafetamine.spring.data.jdbc.demo.domain.exception.DataIntegrityException;
+import com.cafetamine.spring.data.jdbc.demo.repository.movie.MovieActorsReference;
 
 import lombok.AllArgsConstructor;
 
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -23,9 +26,26 @@ public class ActorRepository implements IActorRepository {
 
 
     @Override
+    public Actor create(final Actor actor) {
+         return actorRepository.save(ActorEntity.fromDomain(actor)).toDomain();
+    }
+
+    @Override
+    public List<Actor> create(final List<Actor> actors) {
+        return StreamSupport.stream(actorRepository.saveAll(
+                    actors.stream()
+                          .map(ActorEntity::fromDomain)
+                          .collect(Collectors.toList())
+                ).spliterator(), false)
+                .map(ActorEntity::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Actor> findAll() {
         return StreamSupport.stream(actorRepository.findAll().spliterator(), false)
-                .map(ActorEntity::toDomain).collect(Collectors.toList());
+                            .map(ActorEntity::toDomain)
+                            .collect(Collectors.toList());
     }
 
     @Override
@@ -40,10 +60,7 @@ public class ActorRepository implements IActorRepository {
 
     @Override
     public Optional<Actor> updateDeathdate(final Long id, final LocalDate deathdate) {
-        if (actorRepository.updateDeathdate(id, deathdate)) {
-            return findById(id);
-        }
-        return Optional.empty();
+        return actorRepository.updateDeathdate(id, deathdate) ? findById(id) : Optional.empty();
     }
 
     @Override
@@ -52,6 +69,16 @@ public class ActorRepository implements IActorRepository {
                               .stream()
                               .map(ActorEntity::toDomain)
                               .collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, Actor> findAllByReference(final Map<String, MovieActorsReference> references) {
+        return references.entrySet()
+                         .stream()
+                         .collect(Collectors.toMap(
+                                 Map.Entry::getKey,
+                                 reference -> findById(reference.getValue().getActorId())
+                         .orElseThrow(DataIntegrityException::new)));
     }
 
 }

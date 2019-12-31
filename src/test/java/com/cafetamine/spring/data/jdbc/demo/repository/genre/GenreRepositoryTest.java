@@ -19,9 +19,8 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class GenreRepositoryTest {
 
-    private final static JdbcGenreRepository jdbcGenreRepository = mock(JdbcGenreRepository.class);
-
-    private final static IGenreRepository actorRepository = new GenreRepository(jdbcGenreRepository);
+    private static final JdbcGenreRepository jdbcGenreRepository = mock(JdbcGenreRepository.class);
+    private static final IGenreRepository actorRepository = new GenreRepository(jdbcGenreRepository);
 
     private GenreEntity comedyEntity, tragedyEntity;
     private Genre comedy, tragedy;
@@ -30,12 +29,12 @@ class GenreRepositoryTest {
     void beforeEach() {
         comedyEntity = new GenreEntity(1, "comedy");
         tragedyEntity = new GenreEntity(2, "tragedy");
-        comedy = new Genre("comedy");
-        tragedy = new Genre("tragedy");
+        comedy = new Genre(1, "comedy");
+        tragedy = new Genre(2, "tragedy");
     }
 
     @Test
-    void test_M_findByName() {
+    void findByName() {
         when(jdbcGenreRepository.findByName("comedy")).thenReturn(Optional.of(comedyEntity));
         when(jdbcGenreRepository.findByName("tragedy")).thenReturn(Optional.of(tragedyEntity));
         when(jdbcGenreRepository.findByName("non existing")).thenReturn(Optional.empty());
@@ -46,21 +45,21 @@ class GenreRepositoryTest {
     }
 
     @Test
-    void test_M_create_Existing() {
+    void create_Existing() {
         when(jdbcGenreRepository.findByName("comedy")).thenReturn(Optional.of(comedyEntity));
 
-        assertThat(actorRepository.create(new Genre("comedy"))).isEqualTo(comedy);
+        assertThat(actorRepository.create(new Genre(1, "comedy"))).isEqualTo(comedy);
     }
 
     @Test
-    void test_M_create_NonExisting() {
+    void create_NonExisting() {
         final GenreEntity thrillerEntity = new GenreEntity(null, "thriller");
-        final Genre thriller = new Genre("thriller");
+        final Genre thriller = new Genre(3, "thriller");
 
         when(jdbcGenreRepository.findByName("thriller")).thenReturn(Optional.empty());
         when(jdbcGenreRepository.save(thrillerEntity)).thenReturn(thrillerEntity);
 
-        assertThat(actorRepository.create(thriller)).isEqualTo(thriller);
+        assertThat(actorRepository.create(thriller)).hasFieldOrPropertyWithValue("name", "thriller");
     }
 
 }
