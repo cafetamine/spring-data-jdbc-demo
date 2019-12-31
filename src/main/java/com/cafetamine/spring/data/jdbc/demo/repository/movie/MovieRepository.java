@@ -1,11 +1,11 @@
 package com.cafetamine.spring.data.jdbc.demo.repository.movie;
 
-import com.cafetamine.spring.data.jdbc.demo.domain.actor.Actor;
-import com.cafetamine.spring.data.jdbc.demo.domain.actor.IActorRepository;
-import com.cafetamine.spring.data.jdbc.demo.domain.genre.Genre;
-import com.cafetamine.spring.data.jdbc.demo.domain.genre.IGenreRepository;
-import com.cafetamine.spring.data.jdbc.demo.domain.movie.IMovieRepository;
-import com.cafetamine.spring.data.jdbc.demo.domain.movie.Movie;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.actor.Actor;
+import com.cafetamine.spring.data.jdbc.demo.core.application.actor.IActorRepository;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.genre.Genre;
+import com.cafetamine.spring.data.jdbc.demo.core.application.genre.IGenreRepository;
+import com.cafetamine.spring.data.jdbc.demo.core.application.movie.IMovieRepository;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.movie.Movie;
 
 import lombok.AllArgsConstructor;
 

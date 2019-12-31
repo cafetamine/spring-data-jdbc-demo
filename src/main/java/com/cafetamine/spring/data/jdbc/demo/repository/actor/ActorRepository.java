@@ -1,9 +1,9 @@
 package com.cafetamine.spring.data.jdbc.demo.repository.actor;
 
-import com.cafetamine.spring.data.jdbc.demo.domain.actor.Actor;
-import com.cafetamine.spring.data.jdbc.demo.domain.actor.IActorRepository;
-import com.cafetamine.spring.data.jdbc.demo.domain.def.Gender;
-import com.cafetamine.spring.data.jdbc.demo.domain.exception.DataIntegrityException;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.actor.Actor;
+import com.cafetamine.spring.data.jdbc.demo.core.application.actor.IActorRepository;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.def.Gender;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.exception.DataIntegrityException;
 import com.cafetamine.spring.data.jdbc.demo.repository.movie.MovieActorsReference;
 
 import lombok.AllArgsConstructor;

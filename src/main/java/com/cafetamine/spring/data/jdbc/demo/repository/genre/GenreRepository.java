@@ -1,8 +1,8 @@
 package com.cafetamine.spring.data.jdbc.demo.repository.genre;
 
-import com.cafetamine.spring.data.jdbc.demo.domain.exception.DataIntegrityException;
-import com.cafetamine.spring.data.jdbc.demo.domain.genre.Genre;
-import com.cafetamine.spring.data.jdbc.demo.domain.genre.IGenreRepository;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.exception.DataIntegrityException;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.genre.Genre;
+import com.cafetamine.spring.data.jdbc.demo.core.application.genre.IGenreRepository;
 import com.cafetamine.spring.data.jdbc.demo.repository.movie.MovieGenresReference;
 
 import lombok.AllArgsConstructor;

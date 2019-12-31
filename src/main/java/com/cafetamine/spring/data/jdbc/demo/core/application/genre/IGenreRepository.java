@@ -1,5 +1,6 @@
-package com.cafetamine.spring.data.jdbc.demo.domain.genre;
+package com.cafetamine.spring.data.jdbc.demo.core.application.genre;
 
+import com.cafetamine.spring.data.jdbc.demo.core.domain.genre.Genre;
 import com.cafetamine.spring.data.jdbc.demo.repository.movie.MovieGenresReference;
 
 import java.util.List;

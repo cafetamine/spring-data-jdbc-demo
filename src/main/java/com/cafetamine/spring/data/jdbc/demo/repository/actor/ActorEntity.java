@@ -1,7 +1,7 @@
 package com.cafetamine.spring.data.jdbc.demo.repository.actor;
 
-import com.cafetamine.spring.data.jdbc.demo.domain.actor.Actor;
-import com.cafetamine.spring.data.jdbc.demo.domain.def.Gender;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.actor.Actor;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.def.Gender;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

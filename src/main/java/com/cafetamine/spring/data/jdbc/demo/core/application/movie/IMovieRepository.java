@@ -1,7 +1,8 @@
-package com.cafetamine.spring.data.jdbc.demo.domain.movie;
+package com.cafetamine.spring.data.jdbc.demo.core.application.movie;
 
-import com.cafetamine.spring.data.jdbc.demo.domain.actor.Actor;
-import com.cafetamine.spring.data.jdbc.demo.domain.genre.Genre;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.actor.Actor;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.genre.Genre;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.movie.Movie;
 
 import java.util.List;
 import java.util.Optional;

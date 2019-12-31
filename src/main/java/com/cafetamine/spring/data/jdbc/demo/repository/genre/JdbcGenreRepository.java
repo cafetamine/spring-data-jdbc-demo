@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface JdbcGenreRepository extends CrudRepository<GenreEntity, Integer> {
 
-    @Query("SELECT * FROM GENRE WHERE Name = :name")
+    @Query("SELECT * FROM GENRES WHERE Name = :name")
     Optional<GenreEntity> findByName(String name);
 
 }

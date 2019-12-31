@@ -1,6 +1,6 @@
 package com.cafetamine.spring.data.jdbc.demo.repository.movie;
 
-import com.cafetamine.spring.data.jdbc.demo.domain.actor.Actor;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.actor.Actor;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.cafetamine.spring.data.jdbc.demo.domain.exception;
+package com.cafetamine.spring.data.jdbc.demo.core.domain.exception;
 
 
 public class ResourceNotFoundException extends RuntimeException {

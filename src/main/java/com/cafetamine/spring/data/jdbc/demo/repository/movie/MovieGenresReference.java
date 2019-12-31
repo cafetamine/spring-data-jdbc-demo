@@ -1,6 +1,6 @@
 package com.cafetamine.spring.data.jdbc.demo.repository.movie;
 
-import com.cafetamine.spring.data.jdbc.demo.domain.genre.Genre;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.genre.Genre;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

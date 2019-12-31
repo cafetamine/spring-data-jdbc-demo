@@ -1,6 +1,7 @@
-package com.cafetamine.spring.data.jdbc.demo.domain.actor;
+package com.cafetamine.spring.data.jdbc.demo.core.application.actor;
 
-import com.cafetamine.spring.data.jdbc.demo.domain.def.Gender;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.actor.Actor;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.def.Gender;
 import com.cafetamine.spring.data.jdbc.demo.repository.movie.MovieActorsReference;
 
 import java.time.LocalDate;
