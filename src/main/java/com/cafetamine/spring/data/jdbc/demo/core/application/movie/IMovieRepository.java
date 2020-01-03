@@ -16,8 +16,8 @@ public interface IMovieRepository {
 
     Optional<Movie> findById(Long id);
 
-    List<Movie> findByGenre(Genre genre);
+    List<Movie> findAllByGenre(Genre genre);
 
-    List<Movie> findByActor(Actor actor);
+    List<Movie> findAllByActor(Actor actor);
 
 }

@@ -1,18 +1,20 @@
 package com.cafetamine.spring.data.jdbc.demo.repository.actor;
 
-import com.cafetamine.spring.data.jdbc.demo.domain.actor.Actor;
-import com.cafetamine.spring.data.jdbc.demo.domain.actor.IActorRepository;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.actor.Actor;
+import com.cafetamine.spring.data.jdbc.demo.core.application.actor.IActorRepository;
 
-import com.cafetamine.spring.data.jdbc.demo.domain.def.Gender;
-import org.junit.jupiter.api.BeforeEach;
+import com.cafetamine.spring.data.jdbc.demo.core.domain.def.Gender;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,85 +26,162 @@ import static org.mockito.Mockito.when;
 class ActorRepositoryTest {
 
     private static final JdbcActorRepository jdbcActorRepository = mock(JdbcActorRepository.class);
-
     private static final IActorRepository actorRepository = new ActorRepository(jdbcActorRepository);
 
 
-    private ActorEntity phoenixEntity, niroEntity;
-    private Actor phoenix, niro;
+    private static final ActorEntity phoenixEntity = new ActorEntity(1L, "Joaquin", "Phoenix", LocalDate.of(1974, 10, 28), null, Gender.Male);
+    private static final ActorEntity deNiroEntity = new ActorEntity(2L, "Robert", "De Niro", LocalDate.of(1943, 8, 17), null, Gender.Male);
+    private static final ActorEntity beniginiEntity = new ActorEntity(3L, "Roberto", "Benigini", LocalDate.of(1952, 10, 27), null, Gender.Male);
+    private static final ActorEntity bonacelliEntity = new ActorEntity(4L, "Paolo", "Bonacelli", LocalDate.of(1937, 2, 28), null, Gender.Male);
+    private static final ActorEntity knightleyEntity = new ActorEntity(5L, "Keira", "Knightley", LocalDate.of(1985, 4, 26), null, Gender.Female);
+
+    private static final Actor phoenixDomain = new Actor(1L, "Joaquin", "Phoenix", LocalDate.of(1974, 10, 28), null, Gender.Male);
+    private static final Actor deNiroDomain = new Actor(2L, "Robert", "De Niro", LocalDate.of(1943, 8, 17), null, Gender.Male);
+    private static final Actor beniginiDomain = new Actor(3L, "Roberto", "Benigini", LocalDate.of(1952, 10, 27), null, Gender.Male);
+    private static final Actor bonacelliDomain = new Actor(4L, "Paolo", "Bonacelli", LocalDate.of(1937, 2, 28), null, Gender.Male);
+    private static final Actor knightleyDomain = new Actor(5L, "Keira", "Knightley", LocalDate.of(1985, 4, 26), null, Gender.Female);
 
 
-    @BeforeEach
-    void beforeEach() {
-        phoenixEntity = new ActorEntity(1L, "Joaquin", "Phoenix", LocalDate.of(1974, 10, 28), null, Gender.Male);
-        niroEntity = new ActorEntity(2L, "Robert", "De Niro", LocalDate.of(1943, 8, 17), null, Gender.Male);
-        phoenix = new Actor(1L, "Joaquin", "Phoenix", LocalDate.of(1974, 10, 28), null, Gender.Male);
-        niro = new Actor(2L, "Robert", "De Niro", LocalDate.of(1943, 8, 17), null, Gender.Male);
+    @ParameterizedTest @MethodSource("dataSetCreate")
+    void create(final Actor domain, final ActorEntity entity) {
+        when(jdbcActorRepository.save(entity.withId(null))).thenReturn(entity);
+
+        assertThat(actorRepository.create(domain.withId(null))).isEqualTo(domain);
     }
 
-    @Test
-    void create() {
-        when(jdbcActorRepository.save(phoenixEntity.withId(null))).thenReturn(phoenixEntity);
+    @ParameterizedTest @MethodSource("dataSetCreateAll")
+    void createAll(final List<Actor> domain, final Collection<ActorEntity> entity) {
+        when(jdbcActorRepository.saveAll(entity)).thenReturn(entity);
 
-        assertThat(actorRepository.create(phoenix.withId(null))).isEqualTo(phoenix);
+        assertThat(actorRepository.createAll(domain)).containsExactlyElementsOf(domain);
     }
 
-    @Test
-    void findAll_returnsEmptyList() {
-        when(jdbcActorRepository.findAll()).thenReturn(Collections.emptyList());
+    @ParameterizedTest @MethodSource("dataSetFindAll")
+    void findAll(final Collection<Actor> domain, final Collection<ActorEntity> entity) {
+        when(jdbcActorRepository.findAll()).thenReturn(entity);
 
-        assertThat(actorRepository.findAll()).isEqualTo(Collections.emptyList());
+        assertThat(actorRepository.findAll()).containsExactlyElementsOf(domain);
     }
 
-    @Test
-    void findAll_returnsExpectedValues() {
-        when(jdbcActorRepository.findAll()).thenReturn(Arrays.asList(phoenixEntity, niroEntity));
+    @ParameterizedTest @MethodSource("dataSetFindById")
+    void findById(final Long id, final Actor domain, final ActorEntity entity) {
+        when(jdbcActorRepository.findById(id)).thenReturn(Optional.of(entity));
 
-        assertThat(actorRepository.findAll()).isEqualTo(Arrays.asList(phoenix, niro));
+        assertThat(actorRepository.findById(id)).hasValue(domain);
     }
-
 
     @Test
     void findById_NonExisting() {
-        when(jdbcActorRepository.findById(100L)).thenReturn(Optional.empty());
+        when(jdbcActorRepository.findById(Long.MAX_VALUE)).thenReturn(Optional.empty());
 
-        assertThat(actorRepository.findById(100L)).isEmpty();
+        assertThat(actorRepository.findById(Long.MAX_VALUE)).isEmpty();
+    }
+
+    @ParameterizedTest @MethodSource("dataSetFindByFullname")
+    void findByFullname(final String fullname, final Actor domain, final ActorEntity entity) {
+        when(jdbcActorRepository.findByFullname(fullname)).thenReturn(Optional.of(entity));
+
+        assertThat(actorRepository.findByFullname(fullname)).hasValue(domain);
     }
 
     @Test
-    void findById() {
-        when(jdbcActorRepository.findById(1L)).thenReturn(Optional.of(phoenixEntity));
+    void findByFullname_NonExisting() {
+        when(jdbcActorRepository.findByFullname("Non Existing")).thenReturn(Optional.empty());
 
-        assertThat(actorRepository.findById(1L)).hasValue(phoenix);
+        assertThat(actorRepository.findByFullname("Non Existing")).isEmpty();
+    }
+
+    @ParameterizedTest @MethodSource("dataSetActorsUpdateDeathdate")
+    void updateDeathdate(final Long id, final LocalDate deathdate, final boolean result, final Actor domain, final ActorEntity entity) {
+        when(jdbcActorRepository.updateDeathdate(id, deathdate)).thenReturn(result);
+        when(jdbcActorRepository.findById(id)).thenReturn(Optional.of(entity.withDeathdate(deathdate)));
+
+        assertThat(actorRepository.updateDeathdate(id, deathdate)).hasValue(domain.withDeathdate(deathdate));
     }
 
     @Test
-    void findByFullname() {
-        when(jdbcActorRepository.findByFullname("Joaquin Phoenix")).thenReturn(Optional.of(phoenixEntity));
+    void updateDeathdate_NonExisting() {
+        when(jdbcActorRepository.updateDeathdate(Long.MAX_VALUE, LocalDate.now())).thenReturn(false);
 
-        assertThat(actorRepository.findByFullname("Joaquin Phoenix")).hasValue(phoenix);
+        assertThat(actorRepository.updateDeathdate(Long.MAX_VALUE, LocalDate.now())).isEmpty();
     }
 
-    @Test
-    void updateDeathdate() {
-        when(jdbcActorRepository.updateDeathdate(1L, LocalDate.of(2019, 12, 10))).thenReturn(true);
-        when(jdbcActorRepository.findById(1L)).thenReturn(Optional.of(phoenixEntity));
+    @ParameterizedTest @MethodSource("dataSetFindAllByGender")
+    void findAllByGender(final Gender gender, final List<Actor> domain, final List<ActorEntity> entity) {
+        when(jdbcActorRepository.findAllByGender(gender.name())).thenReturn(entity);
 
-        assertThat(actorRepository.updateDeathdate(1L, LocalDate.of(2019, 12, 10))).hasValue(phoenix);
+        assertThat(actorRepository.findAllByGender(gender)).isEqualTo(domain);
     }
 
-    @Test
-    void findAllByGender() {
-        when(jdbcActorRepository.findAllByGender(Gender.Male.name())).thenReturn(Arrays.asList(phoenixEntity, niroEntity));
 
-        assertThat(actorRepository.findAllByGender(Gender.Male)).isEqualTo(Arrays.asList(phoenix, niro));
+    static Stream<Arguments> dataSetCreate() {
+        return Stream.of(
+                Arguments.of(phoenixDomain, phoenixEntity),
+                Arguments.of(deNiroDomain, deNiroEntity),
+                Arguments.of(beniginiDomain, beniginiEntity),
+                Arguments.of(bonacelliDomain, bonacelliEntity),
+                Arguments.of(knightleyDomain, knightleyEntity)
+        );
     }
 
-    @Test
-    void findAllByGender_ForNonMatching() {
-        when(jdbcActorRepository.findAllByGender(Gender.Male.name())).thenReturn(Collections.emptyList());
+    static Stream<Arguments> dataSetCreateAll() {
+        return Stream.of(
+                Arguments.of(Collections.emptyList(), Collections.emptyList()),
+                Arguments.of(Collections.singletonList(phoenixDomain), Collections.singletonList(phoenixEntity)),
+                Arguments.of(Arrays.asList(phoenixDomain, deNiroDomain), Arrays.asList(phoenixEntity, deNiroEntity))
+        );
+    }
 
-        assertThat(actorRepository.findAllByGender(Gender.Male)).isEqualTo(Collections.emptyList());
+
+    static Stream<Arguments> dataSetFindAll() {
+        return Stream.of(
+                Arguments.of(Collections.emptyList(), Collections.emptyList()),
+                Arguments.of(Collections.singletonList(phoenixDomain), Collections.singletonList(phoenixEntity)),
+                Arguments.of(Arrays.asList(phoenixDomain, deNiroDomain), Arrays.asList(phoenixEntity, deNiroEntity))
+        );
+    }
+
+    static Stream<Arguments> dataSetFindById() {
+        return Stream.of(
+                Arguments.of(1L, phoenixDomain, phoenixEntity),
+                Arguments.of(2L, deNiroDomain, deNiroEntity),
+                Arguments.of(3L, beniginiDomain, beniginiEntity),
+                Arguments.of(4L, bonacelliDomain, bonacelliEntity),
+                Arguments.of(5L, knightleyDomain, knightleyEntity)
+        );
+    }
+
+    static Stream<Arguments> dataSetFindByFullname() {
+        return Stream.of(
+                Arguments.of("Joaquin Phoenix", phoenixDomain, phoenixEntity),
+                Arguments.of("Robert De Niro", deNiroDomain, deNiroEntity),
+                Arguments.of("Roberto Benigini", beniginiDomain, beniginiEntity),
+                Arguments.of("Paolo Bonacelli", bonacelliDomain, bonacelliEntity),
+                Arguments.of("Keira Knightley", knightleyDomain, knightleyEntity)
+        );
+    }
+
+    static Stream<Arguments> dataSetActorsUpdateDeathdate() {
+        return Stream.of(
+                Arguments.of(1L, LocalDate.of(2044, 12, 31), true, phoenixDomain, phoenixEntity),
+                Arguments.of(2L, LocalDate.of(2020, 1, 1), true, deNiroDomain, deNiroEntity),
+                Arguments.of(3L, LocalDate.of(2016, 12, 1), true, beniginiDomain, beniginiEntity),
+                Arguments.of(4L, LocalDate.of(2100, 9, 9), true, bonacelliDomain, bonacelliEntity),
+                Arguments.of(5L, LocalDate.of(2029, 1, 11), true, knightleyDomain, knightleyEntity)
+        );
+    }
+
+
+    static Stream<Arguments> dataSetFindAllByGender() {
+        return Stream.of(
+                Arguments.of(
+                        Gender.Male,
+                        Arrays.asList(phoenixDomain, deNiroDomain, beniginiDomain, bonacelliDomain),
+                        Arrays.asList(phoenixEntity, deNiroEntity, beniginiEntity, bonacelliEntity)
+                ),
+                Arguments.of(Gender.Female, Collections.singletonList(knightleyDomain), Collections.singletonList(knightleyEntity)),
+                Arguments.of(Gender.Other, Collections.emptyList(), Collections.emptyList())
+        );
     }
 
 }

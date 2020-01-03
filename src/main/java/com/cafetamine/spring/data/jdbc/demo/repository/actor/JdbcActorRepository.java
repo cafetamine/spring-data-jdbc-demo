@@ -16,11 +16,11 @@ public interface JdbcActorRepository extends CrudRepository<ActorEntity, Long> {
     @Query("SELECT * FROM ACTORS WHERE CONCAT(Name, ' ', Surname) LIKE :fullname")
     Optional<ActorEntity> findByFullname(String fullname);
 
+    @Query("SELECT * FROM ACTORS WHERE Gender = :gender")
+    List<ActorEntity> findAllByGender(String gender);
+
     @Modifying
     @Query("UPDATE ACTORS SET Deathdate = :deathdate WHERE Id = :id")
     boolean updateDeathdate(Long id, LocalDate deathdate);
-
-    @Query("SELECT * FROM ACTORS WHERE Gender = :gender")
-    List<ActorEntity> findAllByGender(String gender);
 
 }

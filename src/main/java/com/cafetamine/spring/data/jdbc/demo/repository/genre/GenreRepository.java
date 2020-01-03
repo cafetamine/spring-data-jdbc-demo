@@ -3,7 +3,7 @@ package com.cafetamine.spring.data.jdbc.demo.repository.genre;
 import com.cafetamine.spring.data.jdbc.demo.core.domain.exception.DataIntegrityException;
 import com.cafetamine.spring.data.jdbc.demo.core.domain.genre.Genre;
 import com.cafetamine.spring.data.jdbc.demo.core.application.genre.IGenreRepository;
-import com.cafetamine.spring.data.jdbc.demo.repository.movie.MovieGenresReference;
+import com.cafetamine.spring.data.jdbc.demo.repository.movie.MovieGenreReference;
 
 import lombok.AllArgsConstructor;
 
@@ -37,14 +37,14 @@ public class GenreRepository implements IGenreRepository {
     }
 
     @Override
-    public List<Genre> create(final List<Genre> genres) {
+    public List<Genre> createAll(final List<Genre> genres) {
         return genres.stream()
                      .map(this::create)
                      .collect(Collectors.toList());
     }
 
     @Override
-    public List<Genre> findAllByReference(final List<MovieGenresReference> references) {
+    public List<Genre> findAllByReference(final List<MovieGenreReference> references) {
         return references.stream()
                          .map(reference -> findById(reference.getGenreId())
                          .orElseThrow(DataIntegrityException::new))

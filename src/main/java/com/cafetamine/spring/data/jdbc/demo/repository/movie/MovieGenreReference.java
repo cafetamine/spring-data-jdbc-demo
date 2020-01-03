@@ -15,17 +15,17 @@ import java.util.stream.Collectors;
 
 @Data @AllArgsConstructor @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table("MOVIE_GENRES")
-public class MovieGenresReference {
+public class MovieGenreReference {
 
     Integer genreId;
 
 
-    static MovieGenresReference fromDomain(final Genre genre) {
-        return new MovieGenresReference(genre.getId());
+    static MovieGenreReference fromDomain(final Genre genre) {
+        return new MovieGenreReference(genre.getId());
     }
 
-    static List<MovieGenresReference> fromDomain(final List<Genre> genres) {
-        return genres.stream().map(MovieGenresReference::fromDomain).collect(Collectors.toList());
+    static List<MovieGenreReference> fromDomain(final List<Genre> genres) {
+        return genres.stream().map(MovieGenreReference::fromDomain).collect(Collectors.toList());
     }
 
 }

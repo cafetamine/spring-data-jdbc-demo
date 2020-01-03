@@ -8,6 +8,7 @@ class SpringDataJdbcDemoApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }

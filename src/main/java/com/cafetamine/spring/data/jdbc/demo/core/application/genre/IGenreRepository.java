@@ -1,7 +1,7 @@
 package com.cafetamine.spring.data.jdbc.demo.core.application.genre;
 
 import com.cafetamine.spring.data.jdbc.demo.core.domain.genre.Genre;
-import com.cafetamine.spring.data.jdbc.demo.repository.movie.MovieGenresReference;
+import com.cafetamine.spring.data.jdbc.demo.repository.movie.MovieGenreReference;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,8 +15,8 @@ public interface IGenreRepository {
 
     Genre create(Genre genre);
 
-    List<Genre> create(List<Genre> genres);
+    List<Genre> createAll(List<Genre> genres);
 
-    List<Genre> findAllByReference(final List<MovieGenresReference> references);
+    List<Genre> findAllByReference(final List<MovieGenreReference> references);
 
 }

@@ -21,11 +21,12 @@ public class ActorEntity {
 
     @Id @With Long id;
     String name, surname;
-    LocalDate birthdate, deathdate;
+    LocalDate birthdate;
+    @With LocalDate deathdate;
     Gender gender;
 
 
-    public Actor toDomain() {
+    Actor toDomain() {
         return new Actor(id, name, surname, birthdate, deathdate, gender);
     }
 

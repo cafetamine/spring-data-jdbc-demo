@@ -30,10 +30,10 @@ class MovieAggregate {
     LocalDate releaseDate;
 
     @MappedCollection(idColumn = "MovieId", keyColumn = "Role")
-    Map<String, MovieActorsReference> actors;
+    Map<String, MovieActorReference> actors;
 
     @MappedCollection(idColumn = "MovieId", keyColumn = "Significance")
-    List<MovieGenresReference> genres;
+    List<MovieGenreReference> genres;
 
 
     Movie toDomain(final Map<String, Actor> actors, final List<Genre> genres) {
@@ -47,8 +47,8 @@ class MovieAggregate {
                 movie.getTitle(),
                 movie.getDuration().toSeconds(),
                 movie.getReleaseDate(),
-                MovieActorsReference.formDomain(movie.getActors()),
-                MovieGenresReference.fromDomain(movie.getGenres())
+                MovieActorReference.formDomain(movie.getActors()),
+                MovieGenreReference.fromDomain(movie.getGenres())
         );
     }
 

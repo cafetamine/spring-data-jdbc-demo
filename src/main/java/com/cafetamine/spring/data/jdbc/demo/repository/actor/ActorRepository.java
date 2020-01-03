@@ -4,7 +4,7 @@ import com.cafetamine.spring.data.jdbc.demo.core.domain.actor.Actor;
 import com.cafetamine.spring.data.jdbc.demo.core.application.actor.IActorRepository;
 import com.cafetamine.spring.data.jdbc.demo.core.domain.def.Gender;
 import com.cafetamine.spring.data.jdbc.demo.core.domain.exception.DataIntegrityException;
-import com.cafetamine.spring.data.jdbc.demo.repository.movie.MovieActorsReference;
+import com.cafetamine.spring.data.jdbc.demo.repository.movie.MovieActorReference;
 
 import lombok.AllArgsConstructor;
 
@@ -31,7 +31,7 @@ public class ActorRepository implements IActorRepository {
     }
 
     @Override
-    public List<Actor> create(final List<Actor> actors) {
+    public List<Actor> createAll(final List<Actor> actors) {
         return StreamSupport.stream(actorRepository.saveAll(
                     actors.stream()
                           .map(ActorEntity::fromDomain)
@@ -72,7 +72,7 @@ public class ActorRepository implements IActorRepository {
     }
 
     @Override
-    public Map<String, Actor> findAllByReference(final Map<String, MovieActorsReference> references) {
+    public Map<String, Actor> findAllByReference(final Map<String, MovieActorReference> references) {
         return references.entrySet()
                          .stream()
                          .collect(Collectors.toMap(

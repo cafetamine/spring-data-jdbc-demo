@@ -2,7 +2,7 @@ package com.cafetamine.spring.data.jdbc.demo.core.application.actor;
 
 import com.cafetamine.spring.data.jdbc.demo.core.domain.actor.Actor;
 import com.cafetamine.spring.data.jdbc.demo.core.domain.def.Gender;
-import com.cafetamine.spring.data.jdbc.demo.repository.movie.MovieActorsReference;
+import com.cafetamine.spring.data.jdbc.demo.repository.movie.MovieActorReference;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,7 +14,7 @@ public interface IActorRepository {
 
     Actor create(Actor actor);
 
-    List<Actor> create(List<Actor> actors);
+    List<Actor> createAll(List<Actor> actors);
 
     List<Actor> findAll();
 
@@ -26,6 +26,6 @@ public interface IActorRepository {
 
     List<Actor> findAllByGender(Gender gender);
 
-    Map<String, Actor> findAllByReference(Map<String, MovieActorsReference> references);
+    Map<String, Actor> findAllByReference(Map<String, MovieActorReference> references);
 
 }

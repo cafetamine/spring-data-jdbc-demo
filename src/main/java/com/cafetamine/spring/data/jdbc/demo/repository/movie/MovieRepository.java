@@ -46,16 +46,16 @@ public class MovieRepository implements IMovieRepository {
     }
 
     @Override
-    public List<Movie> findByGenre(final Genre genre) {
-        return movieRepository.findByGenreId(genre.getId())
+    public List<Movie> findAllByGenre(final Genre genre) {
+        return movieRepository.findAllByGenreId(genre.getId())
                               .stream()
                               .map(this::aggregateMovie)
                               .collect(Collectors.toList());
     }
 
     @Override
-    public List<Movie> findByActor(final Actor actor) {
-        return movieRepository.findByActorId(actor.getId())
+    public List<Movie> findAllByActor(final Actor actor) {
+        return movieRepository.findAllByActorId(actor.getId())
                               .stream()
                               .map(this::aggregateMovie)
                               .collect(Collectors.toList());
@@ -69,13 +69,13 @@ public class MovieRepository implements IMovieRepository {
     }
 
     private Movie prepareMovieAggregate(final Movie movie) {
-        movie.setGenres(genreRepository.create(movie.getGenres()));
+        movie.setGenres(genreRepository.createAll(movie.getGenres()));
         movie.setActors(prepareMovieActors(movie.getActors()));
         return movie;
     }
 
     private Map<String, Actor> prepareMovieActors(final Map<String, Actor> actors) {
-        final List<Actor> savedActors = actorRepository.create(new ArrayList<>(actors.values()));
+        final List<Actor> savedActors = actorRepository.createAll(new ArrayList<>(actors.values()));
         return actors.entrySet()
                      .stream()
                      .collect(Collectors.toMap(

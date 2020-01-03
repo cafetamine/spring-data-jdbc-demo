@@ -11,9 +11,9 @@ import java.util.Set;
 public interface JdbcMovieRepository extends CrudRepository<MovieAggregate, Long> {
 
     @Query("SELECT * FROM MOVIES JOIN MOVIE_GENRES ON MOVIES.Id = MOVIE_GENRES.MovieId")
-    Set<MovieAggregate> findByGenreId(final Integer genreId);
+    Set<MovieAggregate> findAllByGenreId(final Integer genreId);
 
     @Query("SELECT * FROM MOVIES JOIN MOVIE_ACTORS ON MOVIES.Id = MOVIE_ACTORS.MovieId")
-    Set<MovieAggregate> findByActorId(final Long actorId);
+    Set<MovieAggregate> findAllByActorId(final Long actorId);
 
 }

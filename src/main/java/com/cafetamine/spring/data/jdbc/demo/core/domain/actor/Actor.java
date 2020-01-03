@@ -17,7 +17,8 @@ public class Actor {
 
     @With Long id;
     String name, surname;
-    LocalDate birthdate, deathdate;
+    LocalDate birthdate;
+    @With LocalDate deathdate;
     Gender gender;
 
     public String getFullName() {
